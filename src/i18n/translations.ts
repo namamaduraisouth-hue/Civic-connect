@@ -8,9 +8,10 @@ export const translations = {
     navReportIssue: "Report an Issue",
     navTrackIssue: "Track Issue",
     navPublicDashboard: "Public Dashboard",
-    navCouncillorDashboard: "Councillor Portal",
-    navMlaDashboard: "MLA Analytics",
+    navCouncillorDashboard: "Councillor Dashboard",
+    navMlaDashboard: "MLA Dashboard",
     navAboutUs: "About Us",
+    navOfficialLogin: "Official Portals",
     switchRole: "Role",
 
     // Home Page
@@ -30,9 +31,9 @@ export const translations = {
     // Report Issue Wizard
     reportTitle: "Report a Civic Issue",
     reportSub: "Submit your problem directly to your Ward Councillor and Assembly Representative",
-    step1Title: "1. Issue Details",
+    step1Title: "1. Details & Citizen Info",
     step2Title: "2. Location & Boundary",
-    step3Title: "3. Photos & Evidence",
+    step3Title: "3. Photos & Geotag",
     step4Title: "4. Review & Submit",
     
     // Step 1 Form
@@ -55,6 +56,18 @@ export const translations = {
     timeNoticedLabel: "Time (Optional)",
     nextButton: "Continue to Location",
 
+    // Citizen Info Fields (Mandatory for accountability)
+    citizenInfoSection: "Citizen Contact Information",
+    citizenNameLabel: "Full Name",
+    citizenNamePlaceholder: "Enter your full name",
+    citizenPhoneLabel: "Phone Number",
+    citizenPhonePlaceholder: "10-digit mobile number",
+    citizenEmailLabel: "Email Address (Optional)",
+    citizenEmailPlaceholder: "your.email@example.com",
+    citizenAddressLabel: "Citizen Residence Address / Street",
+    citizenAddressPlaceholder: "Street name, door no, or local area...",
+    citizenPrivacyNote: "Your contact details are kept strictly private and accessible only to authorized Ward Councillor & MLA.",
+
     // Step 2 Form & Location
     locationInstruction: "Pinpoint the exact location using Address search, GPS, or by clicking/dragging the map marker.",
     addressSearchLabel: "Search Address or Landmark",
@@ -70,11 +83,18 @@ export const translations = {
     locationOutsideWarningSub: "Please select a location within Madurai South constituency.",
     locationOutsideSubmitDisabled: "Submission is disabled for locations outside Madurai South boundary.",
 
-    // Step 3 Form & Evidence
-    uploadPhotoLabel: "Upload Photo Evidence (Max 3)",
+    // Step 3 Form & Evidence (Photo is Compulsory)
+    uploadPhotoLabel: "Upload Photo Evidence * (At least one photo is required)",
     uploadVideoLabel: "Upload Video Evidence (Optional)",
     dragDropText: "Click or drag photos here (JPEG, PNG)",
     privacyNote: "Note: Your photos will be attached to the civic record. Personal identification details will be kept private.",
+    photoCompulsoryRequired: "At least one photo is required.",
+    photoCompulsoryNotice: "Photo Evidence * (Compulsory)",
+    photoGeotagCaptured: "Geotag captured from photo / device GPS",
+    photoGeotagCoords: "GPS Coordinates",
+    photoCapturedTime: "Captured Time",
+    btnSelectFile: "Choose Photo from Device",
+    btnTakePhoto: "Take Photo with Camera",
 
     // Step 4 Form & Confirmation
     reviewSummaryTitle: "Review Complaint Details",
@@ -86,20 +106,25 @@ export const translations = {
     reportAnotherBtn: "Report Another Issue",
 
     // Track Issue Page
-    trackPageTitle: "Track Your Civic Issue",
-    trackInputPlaceholder: "Enter Issue ID (e.g., MS-2026-001245)",
+    trackPageTitle: "Track Issue Resolution",
+    trackPageSub: "Enter your unique complaint tracking number to view real-time status and timeline updates.",
+    trackInputPlaceholder: "e.g. MS-2026-001001",
     btnTrack: "Track Issue",
-    issueNotFound: "No complaint found with this ID. Please double check your Issue ID.",
-    statusTimelineTitle: "Resolution Timeline",
+    issueNotFound: "Issue not found. Please check your tracking ID.",
+    statusTimelineTitle: "Resolution Timeline & Official Audit Trail",
 
-    // Issue Status Names
+    // Issue Status Names (Action States)
+    statusNew: "New",
+    statusSeen: "Seen",
+    statusWorking: "Working",
+    statusCompleted: "Completed",
     statusSubmitted: "Submitted",
     statusReceived: "Received by Ward Office",
     statusVerified: "Verified by Inspector",
     statusAssigned: "Assigned to Department",
     statusInProgress: "Work In Progress",
     statusActionTaken: "Action Taken",
-    statusResolved: "Resolved",
+    statusResolved: "Completed",
     statusReopened: "Reopened by Citizen",
 
     // Citizen Verification
@@ -111,35 +136,81 @@ export const translations = {
     verifiedSuccessText: "Thank you for confirming! Your verification helps maintain high quality standards in Madurai South.",
     reopenedText: "This issue has been reopened and prioritized for immediate action.",
 
-    // Councillor Dashboard
+    // Councillor Dashboard & Auth
     councillorTitle: "Councillor Action Portal",
-    councillorSub: "Manage ward complaints, assign field teams, and update resolution progress",
+    councillorSub: "Manage ward complaints, update action states, and coordinate resolution progress",
+    councillorLoginTitle: "Councillor Portal Login",
+    councillorLoginSub: "Authorized Ward Representative Access — 192-Madurai South",
     selectWardFilter: "Select Ward",
     highPriorityQueue: "High Priority Queue",
     needsAttention: "Needs Immediate Attention",
     overdueIssues: "Overdue Reports (> 72 Hours)",
-    btnUpdateStatus: "Update Action Status",
-    modalUpdateTitle: "Update Status & Action Proof",
+    btnUpdateStatus: "Update Status",
+    modalUpdateTitle: "Update Status & Action Record",
     uploadProofPhoto: "Upload Action Proof Photo",
     assignedOfficer: "Assign Field Officer / Department",
+    allWardIssues: "All Ward Issues",
 
-    // MLA Dashboard
+    // MLA Dashboard & Auth
     mlaTitle: "MLA Assembly Monitoring & Analytics",
-    mlaSub: "Strategic overview, ward performance metrics, and complaint density heatmaps",
+    mlaSub: "Constituency-wide strategic overview, ward performance metrics, and issue management",
+    mlaLoginTitle: "MLA Office Portal Login",
+    mlaLoginSub: "192-Madurai South Assembly Constituency Representative Access",
     resolutionRateCard: "Assembly Resolution Rate",
     avgDaysCard: "Average Days to Resolve",
     topCategoryCard: "Most Reported Category",
     wardPerformanceTable: "Ward-Wise Resolution Status",
     colWard: "Ward Name",
     colTotal: "Total Reported",
-    colResolved: "Resolved",
-    colPending: "Pending",
+    colResolved: "Completed",
+    colPending: "Working / Seen",
     colRate: "Resolution Rate",
     chartCategoryDistribution: "Issue Category Distribution",
+    allConstituencyIssues: "All Madurai South Issues",
+
+    // Auth & Permissions
+    emailLabel: "Official Email Address",
+    emailPlaceholder: "name@maduraisouth.gov.in",
+    passwordLabel: "Password",
+    passwordPlaceholder: "••••••••",
+    btnLogin: "Login",
+    forgotPassword: "Forgot Password?",
+    btnLogout: "Logout",
+    loggedInAs: "Logged in as",
+    unauthorizedTitle: "Access Restricted",
+    unauthorizedMlaMsg: "Councillor accounts cannot access the MLA Constituency Oversight Portal. Please use your dedicated Ward Councillor portal.",
+    unauthorizedMla: "Access Denied: Councillor credentials cannot access the MLA Dashboard.",
+    unauthorizedCouncillor: "Access Denied: Only authorized Ward Councillors can access this dashboard.",
+    demoCredentialsHelp: "Demo Credentials for Testing",
+    quickLoginMla: "Quick Fill: MLA Login",
+    quickLoginCouncillor: "Quick Fill: Ward 51 Councillor",
+    invalidCredentials: "Invalid email or password. Please verify your credentials.",
+
+    // MLA Delete Feature
+    btnDeleteIssue: "Delete Issue",
+    deleteModalTitle: "Confirm Issue Deletion",
+    deleteModalPrompt: "Are you sure you want to delete this issue? This will remove it from normal dashboards and record an audit entry.",
+    btnConfirmDelete: "Delete Issue",
+    cancelBtn: "Cancel",
+    issueDeletedSuccess: "Issue successfully removed by MLA office.",
+
+    // Action Updates & Issue Details
+    actionRemarksLabel: "Action Note / Official Remark",
+    actionRemarksPlaceholder: "Describe action taken, repair team dispatched, resolution details...",
+    citizenDetailsTitle: "Citizen Reporter Details",
+    issueDetailsTitle: "Issue Information",
+    evidenceSectionTitle: "Evidence & Photos",
+    historySectionTitle: "Action History & Timeline",
+    btnMarkSeen: "Mark Seen",
+    btnMarkWorking: "Mark Working",
+    btnMarkCompleted: "Mark Completed",
+    statusUpdatedSuccess: "Status updated successfully.",
+    noIssuesInWard: "No active issues in this ward.",
+    noIssuesConstituency: "No active issues across the constituency.",
 
     // Public Dashboard
     publicTitle: "Madurai South Public Civic Map",
-    publicSub: "Live view of public complaints, resolution updates, and constituency metrics",
+    publicSub: "Live view of civic issues, status progression, and constituency metrics",
     filterCategory: "Filter Category",
     filterStatus: "Filter Status",
     filterWard: "Filter Ward",
@@ -167,8 +238,9 @@ export const translations = {
     navTrackIssue: "நிலைமையை கண்காணிக்க",
     navPublicDashboard: "பொது டாஷ்போர்டு",
     navCouncillorDashboard: "கவுன்சிலர் தளம்",
-    navMlaDashboard: "எம்.எல்.ஏ பகுப்பாய்வு",
+    navMlaDashboard: "எம்.எல்.ஏ தளம்",
     navAboutUs: "எங்களைப் பற்றி",
+    navOfficialLogin: "அதிகாரப்பூர்வ தளங்கள்",
     switchRole: "பங்கு",
 
     // Home Page
@@ -188,9 +260,9 @@ export const translations = {
     // Report Issue Wizard
     reportTitle: "குடிமைப் பிரச்சினையை பதிவு செய்யவும்",
     reportSub: "உங்கள் வார்டு கவுன்சிலர் மற்றும் சட்டமன்ற உறுப்பினருக்கு நேரடியாக புகாரை அனுப்பவும்",
-    step1Title: "1. பிரச்சினை விவரங்கள்",
+    step1Title: "1. பிரச்சினை & குடிமகன் விவரங்கள்",
     step2Title: "2. இடம் & எல்லை",
-    step3Title: "3. புகைப்படங்கள் & சான்றுகள்",
+    step3Title: "3. புகைப்படம் & புவிக்குறியீடு",
     step4Title: "4. சரிபார்த்து சமர்ப்பிக்கவும்",
     
     // Step 1 Form
@@ -213,6 +285,18 @@ export const translations = {
     timeNoticedLabel: "நேரம் (விரும்பினால்)",
     nextButton: "இடத்திற்கு தொடரவும்",
 
+    // Citizen Info Fields
+    citizenInfoSection: "குடிமகன் தொடர்பு விவரங்கள்",
+    citizenNameLabel: "முழு பெயர்",
+    citizenNamePlaceholder: "உங்கள் முழு பெயரை உள்ளிடவும்",
+    citizenPhoneLabel: "தொலைபேசி எண்",
+    citizenPhonePlaceholder: "10 இலக்க மொபைல் எண்",
+    citizenEmailLabel: "மின்னஞ்சல் முகவரி (விருப்பத்தேர்வு)",
+    citizenEmailPlaceholder: "உங்கள் மின்னஞ்சல் முகவரி",
+    citizenAddressLabel: "குடிமகன் முகவரி / வசிப்பிடம்",
+    citizenAddressPlaceholder: "தெரு பெயர், கதவு எண் அல்லது பகுதி...",
+    citizenPrivacyNote: "உங்கள் தொடர்பு விவரங்கள் ரகசியமாக பாதுகாக்கப்பட்டு, வார்டு கவுன்சிலர் மற்றும் எம்.எல்.ஏ அலுவலகத்திற்கு மட்டுமே காண்பிக்கப்படும்.",
+
     // Step 2 Form & Location
     locationInstruction: "முகவரி தேடல், ஜிபிஎஸ் அல்லது வரைபடத்தில் கிளிக் செய்து சரியான இடத்தை தேர்வு செய்யவும்.",
     addressSearchLabel: "முகவரி அல்லது அடையாளத்தை தேடவும்",
@@ -228,11 +312,18 @@ export const translations = {
     locationOutsideWarningSub: "தயவுசெய்து மதுரை தெற்கு சட்டமன்ற தொகுதிக்குள் உள்ள இடத்தை தேர்வு செய்யவும்.",
     locationOutsideSubmitDisabled: "மதுரை தெற்கு எல்லைக்கு வெளியே உள்ள இடங்களுக்கு புகாரை சமர்ப்பிக்க முடியாது.",
 
-    // Step 3 Form & Evidence
-    uploadPhotoLabel: "புகைப்பட சான்றுகளை பதிவேற்றவும் (அதிகபட்சம் 3)",
+    // Step 3 Form & Evidence (Photo is Compulsory)
+    uploadPhotoLabel: "புகைப்பட சான்றுகளை பதிவேற்றவும் * (குறைந்தது ஒரு புகைப்படம் கட்டாயம்)",
     uploadVideoLabel: "வீடியோ சான்று (விரும்பினால்)",
     dragDropText: "இங்கே புகைப்படங்களை கிளிக் செய்யவும் அல்லது இழுக்கவும் (JPEG, PNG)",
     privacyNote: "குறிப்பு: உங்கள் புகைப்படங்கள் குடிமைப் பதிவில் சேர்க்கப்படும். தனிப்பட்ட விவரங்கள் ரகசியமாக வைக்கப்படும்.",
+    photoCompulsoryRequired: "குறைந்தது ஒரு புகைப்படம் கட்டாயம்.",
+    photoCompulsoryNotice: "புகைப்பட சான்று * (கட்டாயம்)",
+    photoGeotagCaptured: "புகைப்படம் / ஜிபிஎஸ் மூலம் இருப்பிடம் பதிவு செய்யப்பட்டது",
+    photoGeotagCoords: "ஜிபிஎஸ் ஒருங்கிணைப்புகள் (GPS)",
+    photoCapturedTime: "எடுக்கப்பட்ட நேரம்",
+    btnSelectFile: "சாதனத்திலிருந்து புகைப்படத்தை தேர்வு செய்க",
+    btnTakePhoto: "கேமரா மூலம் புகைப்படம் எடுக்க",
 
     // Step 4 Form & Confirmation
     reviewSummaryTitle: "புகார் விவரங்களை சரிபார்க்கவும்",
@@ -245,19 +336,28 @@ export const translations = {
 
     // Track Issue Page
     trackPageTitle: "உங்கள் குடிமைப் புகாரை கண்காணிக்கவும்",
-    trackInputPlaceholder: "புகார் ஐடியை உள்ளிடவும் (எ.கா., MS-2026-001245)",
+    trackPageSub: "உங்கள் பிரத்யேக புகார் எண்ணை உள்ளிட்டு நிகழ்நேர நிலை மற்றும் காலக்கோடு புதுப்பிப்புகளைக் காணவும்.",
+    trackInputPlaceholder: "புகார் ஐடியை உள்ளிடவும் (எ.கா., MS-2026-001001)",
     btnTrack: "கண்காணிக்கவும்",
     issueNotFound: "இந்த ஐடியில் எந்த புகாரும் கிடைக்கவில்லை. தயவுசெய்து உங்கள் ஐடியை சரிபார்க்கவும்.",
-    statusTimelineTitle: "தீர்வு காலக்கோடு",
+    statusTimelineTitle: "தீர்வு காலக்கோடு & தணிக்கை பதிவு",
 
-    // Issue Status Names
+    // Unauthorized Notice
+    unauthorizedTitle: "அனுமதி கட்டுப்படுத்தப்பட்டுள்ளது",
+    unauthorizedMlaMsg: "கவுன்சிலர் கணக்குகள் எம்.எல்.ஏ தொகுதி மேலோட்ட போர்ட்டலை அணுக முடியாது. தயவுசெய்து உங்கள் வார்டு கவுன்சிலர் போர்ட்டலைப் பயன்படுத்தவும்.",
+
+    // Issue Status Names (Action States)
+    statusNew: "புதியது",
+    statusSeen: "பார்க்கப்பட்டது",
+    statusWorking: "பணியில்",
+    statusCompleted: "முடிக்கப்பட்டது",
     statusSubmitted: "சமர்ப்பிக்கப்பட்டது",
     statusReceived: "வார்டு அலுவலகத்தால் பெறப்பட்டது",
     statusVerified: "ஆய்வாளரால் சரிபார்க்கப்பட்டது",
     statusAssigned: "துறைக்கு ஒதுக்கப்பட்டது",
-    statusInProgress: "வேலை நடக்கிறது",
+    statusInProgress: "பணியில் உள்ளது",
     statusActionTaken: "நடவடிக்கை எடுக்கப்பட்டது",
-    statusResolved: "தீர்க்கப்பட்டது",
+    statusResolved: "முடிக்கப்பட்டது",
     statusReopened: "குடிமகனால் மீண்டும் திறக்கப்பட்டது",
 
     // Citizen Verification
@@ -269,9 +369,11 @@ export const translations = {
     verifiedSuccessText: "உறுதிப்படுத்தியமைக்கு நன்றி! உங்கள் சரிபார்ப்பு மதுரை தெற்கில் உயர் தரத்தை பராமரிக்க உதவுகிறது.",
     reopenedText: "இந்த பிரச்சனை மீண்டும் திறக்கப்பட்டு உடனடியாக கவனிக்க முன்னுரிமை அளிக்கப்பட்டுள்ளது.",
 
-    // Councillor Dashboard
+    // Councillor Dashboard & Auth
     councillorTitle: "கவுன்சிலர் நடவடிக்கை தளம்",
-    councillorSub: "வார்டு புகார்களை நிர்வகிக்கவும், களக் குழுக்களை நியமிக்கவும், தீர்வின் முன்னேற்றத்தைப் புதுப்பிக்கவும்",
+    councillorSub: "வார்டு புகார்களை நிர்வகிக்கவும், நடவடிக்கை நிலையை புதுப்பிக்கவும், தீர்வை கண்காணிக்கவும்",
+    councillorLoginTitle: "கவுன்சிலர் போர்ட்டல் உள்நுழைவு",
+    councillorLoginSub: "அங்கீகரிக்கப்பட்ட வார்டு பிரதிநிதி தளம் — 192-மதுரை தெற்கு",
     selectWardFilter: "வார்டைத் தேர்ந்தெடுக்கவும்",
     highPriorityQueue: "உயர் முன்னுரிமை வரிசை",
     needsAttention: "உடனடி கவனம் தேவை",
@@ -280,24 +382,66 @@ export const translations = {
     modalUpdateTitle: "நிலை மற்றும் நடவடிக்கை சான்றைப் புதுப்பிக்கவும்",
     uploadProofPhoto: "நடவடிக்கை சான்று புகைப்படத்தைப் பதிவேற்றவும்",
     assignedOfficer: "கள அதிகாரி / துறையை ஒதுக்கவும்",
+    allWardIssues: "வார்டு புகார்கள் அனைத்தும்",
 
-    // MLA Dashboard
+    // MLA Dashboard & Auth
     mlaTitle: "எம்.எல்.ஏ சட்டமன்ற கண்காணிப்பு & பகுப்பாய்வு",
-    mlaSub: "வியூக மேலோட்டம், வார்டு செயல்திறன் அளவீடுகள் மற்றும் புகார் அடர்த்தி வரைபடம்",
+    mlaSub: "தொகுதி அளவிலான வியூக மேலோட்டம், வார்டு செயல்திறன் அளவீடுகள் மற்றும் புகார் மேலாண்மை",
+    mlaLoginTitle: "எம்.எல்.ஏ அலுவலக போர்ட்டல் உள்நுழைவு",
+    mlaLoginSub: "192-மதுரை தெற்கு சட்டமன்ற தொகுதி பிரதிநிதி தளம்",
     resolutionRateCard: "சட்டமன்ற தீர்வு விகிதம்",
     avgDaysCard: "தீர்க்க சராசரி நாட்கள்",
     topCategoryCard: "அதிகம் புகாரளிக்கப்பட்ட வகை",
     wardPerformanceTable: "வார்டு வாரியான தீர்வு நிலை",
     colWard: "வார்டு பெயர்",
     colTotal: "மொத்த புகார்கள்",
-    colResolved: "தீர்க்கப்பட்டவை",
-    colPending: "நிலுவையில் உள்ளவை",
+    colResolved: "முடிக்கப்பட்டவை",
+    colPending: "பணியில் / பார்க்கப்பட்டவை",
     colRate: "தீர்வு விகிதம்",
     chartCategoryDistribution: "புகார் வகை விநியோகம்",
+    allConstituencyIssues: "மதுரை தெற்கு புகார்கள் அனைத்தும்",
+
+    // Auth & Permissions
+    emailLabel: "அதிகாரப்பூர்வ மின்னஞ்சல் முகவரி",
+    emailPlaceholder: "name@maduraisouth.gov.in",
+    passwordLabel: "கடவுச்சொல்",
+    passwordPlaceholder: "••••••••",
+    btnLogin: "உள்நுழைக",
+    forgotPassword: "கடவுச்சொல் மறந்துவிட்டதா?",
+    btnLogout: "வெளியேறு",
+    loggedInAs: "உள்நுழைந்துள்ளவர்",
+    unauthorizedMla: "அனுமதி மறுக்கப்பட்டது: கவுன்சிலர் கணக்குகள் எம்.எல்.ஏ டாஷ்போர்டை அணுக முடியாது.",
+    unauthorizedCouncillor: "அனுமதி மறுக்கப்பட்டது: அங்கீகரிக்கப்பட்ட வார்டு கவுன்சிலர்கள் மட்டுமே இந்த டாஷ்போர்டை அணுக முடியும்.",
+    demoCredentialsHelp: "சோதனைக்கான டெமோ உள்நுழைவு விவரங்கள்",
+    quickLoginMla: "விரைவு நிரப்பு: எம்.எல்.ஏ உள்நுழைவு",
+    quickLoginCouncillor: "விரைவு நிரப்பு: வார்டு 51 கவுன்சிலர்",
+    invalidCredentials: "தவறான மின்னஞ்சல் அல்லது கடவுச்சொல். தயவுசெய்து சரிபார்க்கவும்.",
+
+    // MLA Delete Feature
+    btnDeleteIssue: "புகாரை நீக்கு",
+    deleteModalTitle: "புகார் நீக்குதலை உறுதிப்படுத்தவும்",
+    deleteModalPrompt: "இந்த புகாரை நிச்சயமாக நீக்க விரும்புகிறீர்களா? இது செயலில் உள்ள டாஷ்போர்டுகளிலிருந்து அகற்றப்பட்டு தணிக்கை பதிவு செய்யப்படும்.",
+    btnConfirmDelete: "புகாரை நீக்கு",
+    cancelBtn: "ரத்து செய்",
+    issueDeletedSuccess: "புகார் எம்.எல்.ஏ அலுவலகத்தால் நீக்கப்பட்டது.",
+
+    // Action Updates & Issue Details
+    actionRemarksLabel: "அதிகாரப்பூர்வ நடவடிக்கை குறிப்பு",
+    actionRemarksPlaceholder: "எடுக்கப்பட்ட நடவடிக்கை, ஒதுக்கப்பட்ட துறை, பழுதுபார்க்கும் முன்னேற்றம் போன்ற விவரங்களை உள்ளிடவும்...",
+    citizenDetailsTitle: "புகாரளித்த குடிமகன் விவரங்கள்",
+    issueDetailsTitle: "பிரச்சினை விவரங்கள்",
+    evidenceSectionTitle: "சான்றுகள் & புகைப்படங்கள்",
+    historySectionTitle: "நடவடிக்கை வரலாறு & காலக்கோடு",
+    btnMarkSeen: "பார்க்கப்பட்டது என மாற்றுக",
+    btnMarkWorking: "பணியில் என மாற்றுக",
+    btnMarkCompleted: "முடிக்கப்பட்டது என மாற்றுக",
+    statusUpdatedSuccess: "பிரச்சினையின் நிலை வெற்றிகரமாக புதுப்பிக்கப்பட்டது.",
+    noIssuesInWard: "இந்த வார்டில் செயலில் உள்ள புகார்கள் இல்லை.",
+    noIssuesConstituency: "தொகுதியில் செயலில் உள்ள புகார்கள் இல்லை.",
 
     // Public Dashboard
     publicTitle: "மதுரை தெற்கு பொது குடிமை வரைபடம்",
-    publicSub: "பொது புகார்கள், தீர்வு புதுப்பிப்புகள் மற்றும் தொகுதி அளவீடுகளின் நேரடி பார்வை",
+    publicSub: "பொது புகார்கள், தீர்வு நிலைகள் மற்றும் தொகுதி அளவீடுகளின் நேரடி பார்வை",
     filterCategory: "வகையை வடிகட்டவும்",
     filterStatus: "நிலையை வடிகட்டவும்",
     filterWard: "வார்டை வடிகட்டவும்",
@@ -313,6 +457,6 @@ export const translations = {
 
     // Footer
     footerRights: "மதுரை தெற்கு சிவிட் கனெக்ட் — அதிகாரப்பூர்வ சட்டமன்ற குடிமை முயற்சி.",
-    footerDisclaimer: "192-மதுரை தெற்கு சட்டமன்ற தொகுதி மக்களுக்காக வடிவமைக்கப்பட்டது."
+    footerDisclaimer: "192-மதுரை தெற்கு சட்டமன்ற தொகுதி மக்களுக்காக வடிவமைக்கப்பட்டது. வெளிப்படையான குடிமை தொழில்நுட்பத்தால் இயக்கப்படுகிறது."
   }
 };

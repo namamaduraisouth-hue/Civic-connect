@@ -13,7 +13,7 @@ const LanguageContext = createContext<LanguageContextType | undefined>(undefined
 export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [lang, setLangState] = useState<Language>(() => {
     const saved = localStorage.getItem('madurai_civic_lang');
-    return (saved === 'ta' || saved === 'en') ? saved : 'en';
+    return (saved === 'ta' || saved === 'en') ? saved : 'ta';
   });
 
   const setLang = (newLang: Language) => {

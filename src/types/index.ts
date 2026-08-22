@@ -12,47 +12,90 @@ export type IssueCategory =
 
 export type IssueSeverity = 'low' | 'medium' | 'high';
 
-export type IssueStatus = 
-  | 'submitted'
-  | 'received'
-  | 'verified'
-  | 'assigned'
-  | 'in_progress'
-  | 'action_taken'
-  | 'resolved'
-  | 'reopened';
+// Core 3 action states + initial NEW state
+export type IssueStatus = 'NEW' | 'SEEN' | 'WORKING' | 'COMPLETED';
 
-export interface TimelineEvent {
-  status: IssueStatus;
-  timestamp: string;
-  updatedBy: string;
-  comment?: string;
-  evidencePhoto?: string;
+export interface IssueEvidence {
+  id: string;
+  issue_id: string;
+  file_url: string;
+  file_type: 'image' | 'video';
+  latitude?: number;
+  longitude?: number;
+  captured_at?: string;
+  created_at: string;
+  is_exif_verified?: boolean;
+}
+
+export interface ActionUpdate {
+  id: string;
+  issue_id: string;
+  user_id?: string;
+  user_name: string;
+  user_role: 'councillor' | 'mla' | 'citizen';
+  previous_status: IssueStatus;
+  new_status: IssueStatus;
+  message: string;
+  evidence_photo?: string;
+  created_at: string;
 }
 
 export interface CivicIssue {
+  id?: string;
   issue_id: string;
   category: IssueCategory;
   title: string;
   description: string;
-  photos: string[];
-  videos?: string[];
+  
+  // Citizen Creator Details (Private to authorized representatives)
+  citizen_name: string;
+  citizen_phone: string;
+  citizen_email?: string;
+  citizen_address?: string;
+
+  // Location Details
   latitude: number;
   longitude: number;
   address: string;
   ward_id: string;
   ward_name: string;
-  created_at: string;
-  priority_score: number; // 0 to 100
+
+  // Evidence
+  photos: string[];
+  evidence_items?: IssueEvidence[];
+  videos?: string[];
+
+  // Processing & Workflow
   severity: IssueSeverity;
   status: IssueStatus;
-  assigned_to?: string; // Department or Officer name
-  resolved_at?: string;
+  priority_score: number; // 0 to 100
+  assigned_to?: string;
   citizen_verified: boolean;
-  timeline: TimelineEvent[];
+  
+  // Timestamps & Audit Trail
+  created_at: string;
+  updated_at?: string;
+  resolved_at?: string;
+  deleted_at?: string | null;
+  deleted_by?: string | null;
+
+  // Action Updates History
+  timeline: ActionUpdate[];
+
   community_group_id?: string;
   upvotes_count: number;
   reporter_anonymous_id: string;
+}
+
+export interface AuthUser {
+  id: string;
+  email: string;
+  role: 'councillor' | 'mla' | 'admin';
+  name: string;
+  ward_id?: string;
+  ward_name?: string;
+  phone?: string;
+  created_at: string;
 }
 
 export interface WardInfo {
@@ -82,3 +125,4 @@ export interface CommunityIssueGroup {
   priority_score: number;
   status: IssueStatus;
 }
+

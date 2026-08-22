@@ -16,7 +16,7 @@ const defaultIcon = L.icon({
 });
 
 const userMarkerIcon = L.icon({
-  iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
+  iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-blue.png',
   shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
   iconSize: [25, 41],
   iconAnchor: [12, 41],
@@ -25,7 +25,7 @@ const userMarkerIcon = L.icon({
 });
 
 const issueMarkerIcon = L.icon({
-  iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-gold.png',
+  iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-violet.png',
   shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
   iconSize: [25, 41],
   iconAnchor: [12, 41],
@@ -54,7 +54,7 @@ export const ConstituencyMap: React.FC<ConstituencyMapProps> = ({
   selectedLng,
   onLocationSelect,
   issues = [],
-  interactive = true,
+  interactive = false,
   heightClass = "h-[400px]",
   showBoundaryOnly = false
 }) => {
@@ -84,18 +84,18 @@ export const ConstituencyMap: React.FC<ConstituencyMapProps> = ({
     // Add OpenStreetMap tile layer
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 19,
-      attribution: '© OpenStreetMap contributors | Madurai South Geo-Boundary'
+      attribution: '© OpenStreetMap contributors | 192-Madurai South Geo-Boundary'
     }).addTo(map);
 
     // Add Madurai South GeoJSON Boundary Polygon
     const geoJsonLayer = L.geoJSON(maduraiSouthGeoJson as any, {
       style: {
-        color: '#1D4ED8',
-        weight: 3,
-        opacity: 0.85,
-        fillColor: '#60A5FA',
+        color: '#1E40AF',
+        weight: 3.5,
+        opacity: 0.9,
+        fillColor: '#3B82F6',
         fillOpacity: 0.15,
-        dashArray: '5, 5'
+        dashArray: '6, 6'
       }
     }).addTo(map);
 
@@ -147,13 +147,13 @@ export const ConstituencyMap: React.FC<ConstituencyMapProps> = ({
 
       const popupContent = `
         <div style="font-family: sans-serif; text-align: center; padding: 4px;">
-          <strong style="color: ${val.isValid ? '#059669' : '#DC2626'};">
-            ${val.isValid ? '✓ Inside Constituency' : '✕ Outside Constituency'}
+          <strong style="color: ${val.isValid ? '#1E40AF' : '#DC2626'}; font-size: 12px;">
+            ${val.isValid ? '✓ Inside Madurai South' : '✕ Outside Constituency'}
           </strong>
-          <div style="font-size: 11px; color: #4B5563; margin-top: 2px;">
+          <div style="font-size: 11px; color: #1E293B; font-weight: 600; margin-top: 2px;">
             ${val.detectedWard ? val.detectedWard.name_en : 'Madurai South'}
           </div>
-          <div style="font-size: 10px; color: #6B7280; margin-top: 2px;">
+          <div style="font-size: 10px; color: #64748B; margin-top: 2px; font-family: monospace;">
             Lat: ${selectedLat.toFixed(4)}, Lng: ${selectedLng.toFixed(4)}
           </div>
         </div>
@@ -168,7 +168,7 @@ export const ConstituencyMap: React.FC<ConstituencyMapProps> = ({
         });
       }
 
-      map.panTo([selectedLat, selectedLng]);
+      map.panTo([selectedLat, selectedLng], { animate: true, duration: 0.5 });
     }
   }, [selectedLat, selectedLng, interactive, onLocationSelect]);
 
@@ -179,19 +179,22 @@ export const ConstituencyMap: React.FC<ConstituencyMapProps> = ({
 
     issues.forEach(issue => {
       const issueMarker = L.marker([issue.latitude, issue.longitude], {
-        icon: issueMarkerIcon
+        icon: defaultIcon
       });
 
-      const statusColor = issue.status === 'resolved' ? '#10B981' : issue.status === 'in_progress' ? '#3B82F6' : '#F59E0B';
+      const statusColor = 
+        issue.status === 'COMPLETED' ? '#1E40AF' : 
+        issue.status === 'WORKING' ? '#2563EB' : 
+        issue.status === 'SEEN' ? '#3B82F6' : '#60A5FA';
 
       const popupHtml = `
         <div style="font-family: sans-serif; max-width: 220px;">
           <span style="background: ${statusColor}; color: white; padding: 2px 6px; border-radius: 4px; font-size: 10px; font-weight: bold; text-transform: uppercase;">
-            ${issue.status.replace('_', ' ')}
+            ${issue.status}
           </span>
-          <h4 style="font-[13px]; font-weight: bold; margin: 6px 0 2px 0; color: #0F2942;">${issue.title}</h4>
+          <h4 style="font-size: 13px; font-weight: bold; margin: 6px 0 2px 0; color: #0F2942;">${issue.title}</h4>
           <p style="font-size: 11px; color: #475569; margin: 0 0 6px 0;">${issue.ward_name}</p>
-          <div style="font-size: 10px; color: #94A3B8;">ID: ${issue.issue_id}</div>
+          <div style="font-size: 10px; color: #1E40AF; font-weight: bold; font-family: monospace;">ID: ${issue.issue_id}</div>
         </div>
       `;
 
@@ -201,7 +204,7 @@ export const ConstituencyMap: React.FC<ConstituencyMapProps> = ({
   }, [issues]);
 
   return (
-    <div className={`relative w-full ${heightClass} rounded-xl overflow-hidden shadow-inner border border-slate-200`}>
+    <div className={`relative w-full ${heightClass} rounded-2xl overflow-hidden shadow-inner border border-blue-100`}>
       <div ref={mapContainerRef} className="w-full h-full" />
     </div>
   );

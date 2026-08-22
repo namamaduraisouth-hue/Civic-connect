@@ -9,13 +9,8 @@ import {
   AlertCircle, 
   MapPin, 
   ThumbsUp, 
-  RefreshCw, 
   ShieldCheck, 
-  UserCheck, 
-  Building2,
-  FileCheck,
-  AlertTriangle,
-  ArrowRight
+  AlertTriangle
 } from 'lucide-react';
 import { IssueStatus } from '../../types';
 
@@ -39,7 +34,7 @@ export const IssueTracker: React.FC<IssueTrackerProps> = ({ initialSearchId = ''
       const found = getIssueById(initialSearchId);
       if (found) setActiveIssue(found);
     }
-  }, [initialSearchId]);
+  }, [initialSearchId, issues]);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -51,24 +46,19 @@ export const IssueTracker: React.FC<IssueTrackerProps> = ({ initialSearchId = ''
   };
 
   const timelineSteps: { status: IssueStatus; labelEn: string; labelTa: string }[] = [
-    { status: 'submitted', labelEn: 'Submitted', labelTa: 'சமர்ப்பிக்கப்பட்டது' },
-    { status: 'received', labelEn: 'Received by Ward', labelTa: 'வார்டால் பெறப்பட்டது' },
-    { status: 'verified', labelEn: 'Inspected', labelTa: 'ஆய்வு செய்யப்பட்டது' },
-    { status: 'assigned', labelEn: 'Dept Assigned', labelTa: 'துறைக்கு ஒதுக்கப்பட்டது' },
-    { status: 'in_progress', labelEn: 'Work In Progress', labelTa: 'வேலை நடக்கிறது' },
-    { status: 'resolved', labelEn: 'Resolved', labelTa: 'தீர்க்கப்பட்டது' }
+    { status: 'NEW', labelEn: 'New Report', labelTa: 'புதிய புகார்' },
+    { status: 'SEEN', labelEn: 'Acknowledged', labelTa: 'பார்வையிடப்பட்டது' },
+    { status: 'WORKING', labelEn: 'In Progress', labelTa: 'செயலில் உள்ளது' },
+    { status: 'COMPLETED', labelEn: 'Completed', labelTa: 'நிறைவுற்றது' }
   ];
 
   const getStepState = (stepStatus: IssueStatus) => {
     if (!activeIssue) return 'pending';
-    const statusOrder: IssueStatus[] = ['submitted', 'received', 'verified', 'assigned', 'in_progress', 'action_taken', 'resolved'];
+    const statusOrder: IssueStatus[] = ['NEW', 'SEEN', 'WORKING', 'COMPLETED'];
     const currentIndex = statusOrder.indexOf(activeIssue.status);
     const stepIndex = statusOrder.indexOf(stepStatus);
 
-    if (activeIssue.status === 'reopened' && stepStatus === 'resolved') {
-      return 'reopened';
-    }
-    if (currentIndex > stepIndex || activeIssue.status === 'resolved') return 'completed';
+    if (currentIndex > stepIndex || activeIssue.status === 'COMPLETED') return 'completed';
     if (currentIndex === stepIndex) return 'current';
     return 'pending';
   };
@@ -76,13 +66,13 @@ export const IssueTracker: React.FC<IssueTrackerProps> = ({ initialSearchId = ''
   return (
     <div className="max-w-5xl mx-auto px-4 py-8">
       
-      {/* Header & Search Bar */}
-      <div className="civic-gradient-header text-white p-8 rounded-2xl shadow-lg mb-8">
-        <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight mb-2">
+      {/* Header & Search Bar - WHITE + NAVY BLUE */}
+      <div className="bg-gradient-to-r from-[#0F2942] via-blue-900 to-[#1E40AF] text-white p-8 rounded-3xl shadow-xl mb-8 border-b-4 border-blue-500">
+        <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight mb-2">
           {t('trackPageTitle')}
         </h1>
-        <p className="text-xs md:text-sm text-slate-200 mb-6">
-          Enter your unique complaint tracking number to view real-time status and timeline updates.
+        <p className="text-xs sm:text-sm text-blue-100 mb-6">
+          {t('trackPageSub')}
         </p>
 
         <form onSubmit={handleSearch} className="flex gap-2 max-w-xl">
@@ -93,12 +83,12 @@ export const IssueTracker: React.FC<IssueTrackerProps> = ({ initialSearchId = ''
               value={searchId}
               onChange={(e) => setSearchId(e.target.value)}
               placeholder={t('trackInputPlaceholder')}
-              className="w-full pl-11 pr-4 py-3 bg-white text-slate-900 font-mono font-bold text-sm rounded-xl focus:ring-2 focus:ring-amber-400 focus:outline-none shadow-sm"
+              className="w-full pl-11 pr-4 py-3 bg-white text-slate-900 font-mono font-bold text-sm rounded-xl focus:ring-2 focus:ring-blue-400 focus:outline-none shadow-sm"
             />
           </div>
           <button
             type="submit"
-            className="px-6 py-3 bg-amber-500 hover:bg-amber-600 text-slate-950 font-extrabold text-sm rounded-xl shadow-md transition-all flex items-center gap-2"
+            className="px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white font-extrabold text-sm rounded-xl shadow-md transition-all flex items-center gap-2"
           >
             {t('btnTrack')}
           </button>
@@ -107,47 +97,53 @@ export const IssueTracker: React.FC<IssueTrackerProps> = ({ initialSearchId = ''
 
       {/* Main Content */}
       {!activeIssue ? (
-        <div className="bg-white rounded-2xl p-12 border border-slate-200 text-center space-y-4 shadow-sm">
-          <AlertCircle className="w-12 h-12 text-amber-500 mx-auto" />
+        <div className="bg-white rounded-3xl p-12 border border-blue-100 text-center space-y-4 shadow-sm">
+          <AlertCircle className="w-12 h-12 text-blue-600 mx-auto" />
           <h3 className="text-lg font-bold text-slate-800">{t('issueNotFound')}</h3>
           <p className="text-xs text-slate-500 max-w-sm mx-auto">
-            Please check the Issue ID format (e.g., MS-2026-001001) or try searching from recent reports on the Public Dashboard.
+            {lang === 'ta' 
+              ? 'தயவுசெய்து புகார் எண்ணை சரிபார்க்கவும் (எ.கா: MS-2026-001001).' 
+              : 'Please verify the Issue ID format (e.g., MS-2026-001001) or browse the Public Dashboard.'}
           </p>
         </div>
       ) : (
         <div className="space-y-8">
           
           {/* Issue Header Info Card */}
-          <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-md space-y-4">
+          <div className="bg-white rounded-3xl p-6 sm:p-8 border border-blue-100 shadow-md space-y-4">
             <div className="flex flex-wrap justify-between items-start gap-4">
               <div>
                 <div className="flex items-center gap-2">
-                  <span className="font-mono text-xs font-bold bg-blue-100 text-blue-900 px-2.5 py-1 rounded-md border border-blue-200">
+                  <span className="font-mono text-xs font-extrabold bg-blue-50 text-blue-900 px-2.5 py-1 rounded-md border border-blue-200">
                     {activeIssue.issue_id}
                   </span>
                   <span className={`text-[11px] font-extrabold uppercase px-2.5 py-0.5 rounded-full ${
-                    activeIssue.status === 'resolved' 
+                    activeIssue.status === 'COMPLETED'
                       ? 'bg-emerald-100 text-emerald-800 border border-emerald-300' 
-                      : activeIssue.status === 'reopened'
-                      ? 'bg-red-100 text-red-800 border border-red-300 animate-pulse'
-                      : 'bg-amber-100 text-amber-800 border border-amber-300'
+                      : activeIssue.status === 'WORKING'
+                      ? 'bg-blue-200 text-blue-900 border border-blue-400'
+                      : activeIssue.status === 'SEEN'
+                      ? 'bg-blue-50 text-blue-800 border border-blue-200'
+                      : 'bg-blue-100 text-blue-900 border border-blue-300'
                   }`}>
-                    {lang === 'ta' ? activeIssue.status : activeIssue.status.replace('_', ' ')}
+                    {lang === 'ta' 
+                      ? activeIssue.status === 'NEW' ? t('statusNew') : activeIssue.status === 'SEEN' ? t('statusSeen') : activeIssue.status === 'WORKING' ? t('statusWorking') : t('statusCompleted')
+                      : activeIssue.status}
                   </span>
                   {activeIssue.citizen_verified && (
-                    <span className="text-[11px] font-bold bg-emerald-700 text-white px-2 py-0.5 rounded flex items-center gap-1">
+                    <span className="text-[11px] font-bold bg-blue-900 text-white px-2 py-0.5 rounded flex items-center gap-1">
                       <ShieldCheck className="w-3.5 h-3.5" />
                       Citizen Verified
                     </span>
                   )}
                 </div>
-                <h2 className="text-xl font-bold text-slate-900 mt-2">{activeIssue.title}</h2>
+                <h2 className="text-xl font-extrabold text-slate-900 mt-2">{activeIssue.title}</h2>
               </div>
 
               <div className="flex items-center gap-2">
                 <button
                   onClick={() => upvoteIssue(activeIssue.issue_id)}
-                  className="px-3.5 py-2 bg-slate-100 hover:bg-blue-50 text-slate-700 hover:text-blue-900 border border-slate-200 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all"
+                  className="px-3.5 py-2 bg-blue-50 hover:bg-blue-100 text-blue-900 border border-blue-200 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all"
                 >
                   <ThumbsUp className="w-4 h-4 text-blue-600" />
                   <span>Support ({activeIssue.upvotes_count})</span>
@@ -155,11 +151,30 @@ export const IssueTracker: React.FC<IssueTrackerProps> = ({ initialSearchId = ''
               </div>
             </div>
 
-            <p className="text-xs text-slate-700 leading-relaxed bg-slate-50 p-4 rounded-xl border border-slate-100">
+            <p className="text-xs text-slate-700 leading-relaxed bg-slate-50 p-4 rounded-2xl border border-slate-200">
               {activeIssue.description}
             </p>
 
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
+            {/* Evidence Photos */}
+            {activeIssue.photos && activeIssue.photos.length > 0 && (
+              <div className="space-y-2">
+                <span className="text-[11px] font-bold uppercase text-slate-500 block">
+                  {t('evidenceSectionTitle')}:
+                </span>
+                <div className="flex flex-wrap gap-3">
+                  {activeIssue.photos.map((p, idx) => (
+                    <img
+                      key={idx}
+                      src={p}
+                      alt="Evidence"
+                      className="w-28 h-24 object-cover rounded-xl border border-slate-300 shadow-sm"
+                    />
+                  ))}
+                </div>
+              </div>
+            )}
+
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs pt-2">
               <div>
                 <span className="text-slate-500 font-bold uppercase block mb-1">Ward & Area</span>
                 <p className="font-bold text-slate-900">{activeIssue.ward_name}</p>
@@ -168,7 +183,7 @@ export const IssueTracker: React.FC<IssueTrackerProps> = ({ initialSearchId = ''
               <div>
                 <span className="text-slate-500 font-bold uppercase block mb-1">Assigned Department</span>
                 <p className="font-semibold text-blue-900">
-                  {activeIssue.assigned_to || 'Pending Councillor Assignment'}
+                  {activeIssue.assigned_to || 'Ward Field Operations'}
                 </p>
               </div>
               <div>
@@ -180,15 +195,15 @@ export const IssueTracker: React.FC<IssueTrackerProps> = ({ initialSearchId = ''
             </div>
           </div>
 
-          {/* RESOLUTION TIMELINE STEPS */}
-          <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-md">
+          {/* RESOLUTION TIMELINE STEPS (4 MAIN STATES) */}
+          <div className="bg-white rounded-3xl p-6 sm:p-8 border border-blue-100 shadow-md">
             <h3 className="text-base font-bold text-slate-900 mb-6 flex items-center gap-2">
-              <Clock className="w-5 h-5 text-blue-600" />
+              <Clock className="w-5 h-5 text-blue-700" />
               {t('statusTimelineTitle')}
             </h3>
 
             {/* Horizontal Timeline bar for desktop */}
-            <div className="hidden sm:grid grid-cols-6 gap-2 mb-8 relative">
+            <div className="hidden sm:grid grid-cols-4 gap-2 mb-8 relative">
               <div className="absolute top-4 left-0 w-full h-1 bg-slate-200 -z-0" />
               {timelineSteps.map((s, idx) => {
                 const state = getStepState(s.status);
@@ -196,11 +211,9 @@ export const IssueTracker: React.FC<IssueTrackerProps> = ({ initialSearchId = ''
                   <div key={s.status} className="relative z-10 text-center flex flex-col items-center">
                     <div className={`w-9 h-9 rounded-full flex items-center justify-center font-bold text-xs shadow-sm transition-all ${
                       state === 'completed'
-                        ? 'bg-emerald-600 text-white ring-4 ring-emerald-100'
+                        ? 'bg-blue-800 text-white ring-4 ring-blue-100'
                         : state === 'current'
-                        ? 'bg-blue-600 text-white ring-4 ring-blue-100'
-                        : state === 'reopened'
-                        ? 'bg-red-600 text-white ring-4 ring-red-100'
+                        ? 'bg-blue-600 text-white ring-4 ring-blue-200'
                         : 'bg-slate-200 text-slate-500'
                     }`}>
                       {state === 'completed' ? <CheckCircle2 className="w-5 h-5" /> : idx + 1}
@@ -216,64 +229,58 @@ export const IssueTracker: React.FC<IssueTrackerProps> = ({ initialSearchId = ''
             </div>
 
             {/* Detailed Timeline Events Feed */}
-            <div className="space-y-4 border-l-2 border-slate-200 pl-4 ml-2">
+            <div className="space-y-4 border-l-2 border-blue-200 pl-4 ml-2">
               {activeIssue.timeline.map((event, idx) => (
                 <div key={idx} className="relative pb-4">
                   <div className="absolute -left-[23px] top-0 w-3.5 h-3.5 rounded-full bg-blue-600 border-2 border-white" />
                   <div className="flex justify-between items-start">
                     <div>
-                      <span className="text-xs font-bold text-slate-900 capitalize">
-                        {event.status.replace('_', ' ')}
+                      <span className="text-xs font-bold text-slate-900 uppercase">
+                        {event.new_status || 'UPDATE'}
                       </span>
                       <span className="text-[11px] text-slate-500 font-medium ml-2">
-                        by {event.updatedBy}
+                        by {event.user_name}
                       </span>
                     </div>
                     <span className="text-[11px] text-slate-400 font-mono">
-                      {new Date(event.timestamp).toLocaleDateString()} {new Date(event.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                      {new Date(event.created_at).toLocaleDateString()}
                     </span>
                   </div>
-                  {event.comment && (
-                    <p className="text-xs text-slate-600 mt-1 bg-slate-50 p-2.5 rounded-lg border border-slate-100">
-                      "{event.comment}"
+                  {event.message && (
+                    <p className="text-xs text-slate-600 mt-1 bg-slate-50 p-2.5 rounded-xl border border-slate-200">
+                      "{event.message}"
                     </p>
-                  )}
-                  {event.evidencePhoto && (
-                    <div className="mt-2">
-                      <span className="text-[10px] text-slate-500 font-bold uppercase block mb-1">Resolution Action Proof Photo:</span>
-                      <img src={event.evidencePhoto} alt="Action Proof" className="w-36 h-24 object-cover rounded-lg border-2 border-emerald-500 shadow-sm" />
-                    </div>
                   )}
                 </div>
               ))}
             </div>
           </div>
 
-          {/* CITIZEN VERIFICATION SECTION (TRIGGERED WHEN RESOLVED) */}
-          {activeIssue.status === 'resolved' && (
-            <div className="bg-emerald-50 border-2 border-emerald-500 p-6 rounded-2xl shadow-lg space-y-4">
+          {/* CITIZEN VERIFICATION SECTION (TRIGGERED WHEN COMPLETED) */}
+          {activeIssue.status === 'COMPLETED' && (
+            <div className="bg-blue-50/70 border-2 border-blue-400 p-6 rounded-2xl shadow-lg space-y-4">
               <div className="flex items-center gap-3">
-                <ShieldCheck className="w-8 h-8 text-emerald-600 shrink-0" />
+                <ShieldCheck className="w-8 h-8 text-blue-700 shrink-0" />
                 <div>
-                  <h3 className="text-base md:text-lg font-extrabold text-emerald-950">
+                  <h3 className="text-base md:text-lg font-extrabold text-blue-950">
                     {t('verificationTitle')}
                   </h3>
-                  <p className="text-xs text-emerald-800 mt-0.5">
+                  <p className="text-xs text-blue-800 mt-0.5">
                     Your feedback ensures official ward accountability in Madurai South Assembly Constituency.
                   </p>
                 </div>
               </div>
 
               {activeIssue.citizen_verified ? (
-                <div className="bg-emerald-100/90 text-emerald-950 p-4 rounded-xl text-xs font-bold flex items-center gap-2 border border-emerald-300">
-                  <CheckCircle2 className="w-5 h-5 text-emerald-700" />
+                <div className="bg-blue-100 text-blue-950 p-4 rounded-xl text-xs font-bold flex items-center gap-2 border border-blue-300">
+                  <CheckCircle2 className="w-5 h-5 text-blue-700" />
                   {t('verifiedSuccessText')}
                 </div>
               ) : (
                 <div className="flex flex-wrap gap-4 pt-2">
                   <button
                     onClick={() => verifyIssueResolution(activeIssue.issue_id, true)}
-                    className="px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs rounded-xl shadow-md transition-all flex items-center gap-2"
+                    className="px-6 py-3 bg-blue-700 hover:bg-blue-800 text-white font-extrabold text-xs rounded-xl shadow-md transition-all flex items-center gap-2"
                   >
                     <CheckCircle2 className="w-4 h-4" />
                     {t('btnFixed')}
@@ -331,9 +338,9 @@ export const IssueTracker: React.FC<IssueTrackerProps> = ({ initialSearchId = ''
           )}
 
           {/* Location Map View */}
-          <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-md">
+          <div className="bg-white rounded-2xl p-6 border border-blue-100 shadow-md">
             <h3 className="text-base font-bold text-slate-900 mb-4 flex items-center gap-2">
-              <MapPin className="w-5 h-5 text-blue-600" />
+              <MapPin className="w-5 h-5 text-blue-700" />
               Location Map Verification
             </h3>
             <ConstituencyMap

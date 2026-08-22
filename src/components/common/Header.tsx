@@ -2,20 +2,19 @@ import React, { useState } from 'react';
 import { useLanguage } from '../../context/LanguageContext';
 import { useAuth } from '../../context/AuthContext';
 import { CivicEmblem } from './CivicEmblem';
-import { MADURAI_SOUTH_WARDS } from '../../data/maduraiSouthWards';
 import { 
-  Globe, 
-  UserCheck, 
-  Menu, 
-  X, 
   PlusCircle, 
   Search, 
   Map, 
   LayoutDashboard, 
   BarChart3,
-  Home
+  Home,
+  LogOut,
+  ShieldCheck,
+  Menu,
+  X,
+  Lock
 } from 'lucide-react';
-import { Role } from '../../types';
 
 interface HeaderProps {
   currentTab: string;
@@ -24,51 +23,53 @@ interface HeaderProps {
 
 export const Header: React.FC<HeaderProps> = ({ currentTab, setCurrentTab }) => {
   const { lang, setLang, t } = useLanguage();
-  const { role, setRole, selectedWardFilter, setSelectedWardFilter } = useAuth();
+  const { role, user, isAuthenticated, logout } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
-  const rolesList: { id: Role; labelEn: string; labelTa: string }[] = [
-    { id: 'citizen', labelEn: 'Citizen', labelTa: 'குடிமகன்' },
-    { id: 'councillor', labelEn: 'Councillor', labelTa: 'கவுன்சிலர்' },
-    { id: 'mla', labelEn: 'MLA Office', labelTa: 'எம்.எல்.ஏ அலுவலகம்' },
-  ];
 
   const handleNavClick = (tab: string) => {
     setCurrentTab(tab);
     setMobileMenuOpen(false);
   };
 
+  const handleLogout = () => {
+    logout();
+    setCurrentTab('home');
+    setMobileMenuOpen(false);
+  };
+
   return (
-    <header className="sticky top-0 z-50 bg-[#0F2942] text-white shadow-lg border-b border-amber-600/30">
-      {/* Top Banner */}
-      <div className="bg-slate-900/80 text-amber-400 text-xs py-1 px-4 flex justify-between items-center border-b border-slate-800">
+    <header className="sticky top-0 z-50 bg-[#0F2942] text-white shadow-lg border-b border-blue-900">
+      {/* Top Banner - WHITE + NAVY BLUE */}
+      <div className="bg-[#0B1E30] text-blue-200 text-xs py-1.5 px-4 flex justify-between items-center border-b border-blue-950">
         <div className="flex items-center space-x-2">
-          <span className="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-          <span className="font-semibold tracking-wide">{t('constituencyTitle')}</span>
+          <span className="inline-block w-2 h-2 rounded-full bg-blue-400 animate-pulse" />
+          <span className="font-bold tracking-wide text-white">{t('constituencyTitle')}</span>
         </div>
-        <div className="flex items-center space-x-4">
-          <span className="hidden md:inline text-slate-300">{t('tagline')}</span>
-          {/* Language Switcher Button */}
-          <div className="flex items-center bg-slate-800 rounded-md p-0.5 border border-slate-700">
-            <button
-              onClick={() => setLang('en')}
-              className={`px-2.5 py-0.5 text-xs rounded font-medium transition-all ${
-                lang === 'en' 
-                  ? 'bg-blue-600 text-white font-bold shadow-sm' 
-                  : 'text-slate-400 hover:text-white'
-              }`}
-            >
-              English
-            </button>
+        
+        <div className="flex items-center space-x-3">
+          <span className="hidden md:inline text-blue-200 text-[11px] font-medium">{t('tagline')}</span>
+          
+          {/* Strict Language Switcher Button (DEFAULT TAMIL) */}
+          <div className="flex items-center bg-blue-950/80 rounded-lg p-0.5 border border-blue-800">
             <button
               onClick={() => setLang('ta')}
-              className={`px-2.5 py-0.5 text-xs rounded font-medium transition-all ${
+              className={`px-2.5 py-0.5 text-xs rounded-md font-bold transition-all ${
                 lang === 'ta' 
-                  ? 'bg-blue-600 text-white font-bold shadow-sm' 
-                  : 'text-slate-400 hover:text-white'
+                  ? 'bg-blue-600 text-white shadow-sm' 
+                  : 'text-blue-300 hover:text-white'
               }`}
             >
               தமிழ்
+            </button>
+            <button
+              onClick={() => setLang('en')}
+              className={`px-2.5 py-0.5 text-xs rounded-md font-bold transition-all ${
+                lang === 'en' 
+                  ? 'bg-blue-600 text-white shadow-sm' 
+                  : 'text-blue-300 hover:text-white'
+              }`}
+            >
+              English
             </button>
           </div>
         </div>
@@ -88,18 +89,18 @@ export const Header: React.FC<HeaderProps> = ({ currentTab, setCurrentTab }) => 
               <div className="font-extrabold text-base md:text-lg tracking-tight text-white flex items-center gap-1.5">
                 {t('appName')}
               </div>
-              <p className="text-[11px] text-amber-400/90 font-medium tracking-wide">
+              <p className="text-[11px] text-blue-300 font-medium tracking-wide">
                 {t('tagline')}
               </p>
             </div>
           </div>
 
           {/* Desktop Navigation Links */}
-          <nav className="hidden lg:flex items-center space-x-1">
+          <nav className="hidden lg:flex items-center space-x-1.5">
             <button
               onClick={() => handleNavClick('home')}
-              className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-1.5 ${
-                currentTab === 'home' ? 'bg-blue-600/30 text-blue-200 border border-blue-400/40' : 'text-slate-200 hover:bg-slate-800'
+              className={`px-3 py-2 rounded-xl text-xs font-bold transition-colors flex items-center gap-1.5 ${
+                currentTab === 'home' ? 'bg-blue-600 text-white shadow' : 'text-blue-100 hover:bg-blue-900/60'
               }`}
             >
               <Home className="w-4 h-4" />
@@ -108,10 +109,10 @@ export const Header: React.FC<HeaderProps> = ({ currentTab, setCurrentTab }) => 
 
             <button
               onClick={() => handleNavClick('report')}
-              className={`px-3.5 py-2 rounded-lg text-sm font-semibold transition-all flex items-center gap-1.5 shadow-md ${
+              className={`px-3.5 py-2 rounded-xl text-xs font-extrabold transition-all flex items-center gap-1.5 shadow-md ${
                 currentTab === 'report' 
-                  ? 'bg-emerald-600 text-white ring-2 ring-emerald-300' 
-                  : 'bg-emerald-600 hover:bg-emerald-500 text-white'
+                  ? 'bg-blue-500 text-white ring-2 ring-blue-300' 
+                  : 'bg-blue-600 hover:bg-blue-500 text-white'
               }`}
             >
               <PlusCircle className="w-4 h-4" />
@@ -120,8 +121,8 @@ export const Header: React.FC<HeaderProps> = ({ currentTab, setCurrentTab }) => 
 
             <button
               onClick={() => handleNavClick('track')}
-              className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-1.5 ${
-                currentTab === 'track' ? 'bg-blue-600/30 text-blue-200 border border-blue-400/40' : 'text-slate-200 hover:bg-slate-800'
+              className={`px-3 py-2 rounded-xl text-xs font-bold transition-colors flex items-center gap-1.5 ${
+                currentTab === 'track' ? 'bg-blue-600 text-white shadow' : 'text-blue-100 hover:bg-blue-900/60'
               }`}
             >
               <Search className="w-4 h-4" />
@@ -130,19 +131,20 @@ export const Header: React.FC<HeaderProps> = ({ currentTab, setCurrentTab }) => 
 
             <button
               onClick={() => handleNavClick('public')}
-              className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-1.5 ${
-                currentTab === 'public' ? 'bg-blue-600/30 text-blue-200 border border-blue-400/40' : 'text-slate-200 hover:bg-slate-800'
+              className={`px-3 py-2 rounded-xl text-xs font-bold transition-colors flex items-center gap-1.5 ${
+                currentTab === 'public' ? 'bg-blue-600 text-white shadow' : 'text-blue-100 hover:bg-blue-900/60'
               }`}
             >
               <Map className="w-4 h-4" />
               {t('navPublicDashboard')}
             </button>
 
+            {/* Authenticated Councillor Tab */}
             {role === 'councillor' && (
               <button
                 onClick={() => handleNavClick('councillor')}
-                className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-1.5 ${
-                  currentTab === 'councillor' ? 'bg-amber-500/30 text-amber-200 border border-amber-400/40' : 'text-amber-300 hover:bg-slate-800'
+                className={`px-3 py-2 rounded-xl text-xs font-extrabold transition-colors flex items-center gap-1.5 ${
+                  currentTab === 'councillor' ? 'bg-blue-500 text-white shadow-md' : 'text-blue-200 hover:bg-blue-900'
                 }`}
               >
                 <LayoutDashboard className="w-4 h-4" />
@@ -150,11 +152,12 @@ export const Header: React.FC<HeaderProps> = ({ currentTab, setCurrentTab }) => 
               </button>
             )}
 
+            {/* Authenticated MLA Tab */}
             {role === 'mla' && (
               <button
                 onClick={() => handleNavClick('mla')}
-                className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-1.5 ${
-                  currentTab === 'mla' ? 'bg-purple-600/30 text-purple-200 border border-purple-400/40' : 'text-purple-300 hover:bg-slate-800'
+                className={`px-3 py-2 rounded-xl text-xs font-extrabold transition-colors flex items-center gap-1.5 ${
+                  currentTab === 'mla' ? 'bg-blue-500 text-white shadow-md' : 'text-blue-200 hover:bg-blue-900'
                 }`}
               >
                 <BarChart3 className="w-4 h-4" />
@@ -163,38 +166,44 @@ export const Header: React.FC<HeaderProps> = ({ currentTab, setCurrentTab }) => 
             )}
           </nav>
 
-          {/* Role Switcher */}
-          <div className="hidden lg:flex items-center space-x-2 pl-3 border-l border-slate-700">
-            <UserCheck className="w-4 h-4 text-amber-400" />
-            <select
-              value={role}
-              onChange={(e) => {
-                const newRole = e.target.value as Role;
-                setRole(newRole);
-                if (newRole === 'councillor') setCurrentTab('councillor');
-                else if (newRole === 'mla') setCurrentTab('mla');
-              }}
-              className="bg-slate-800 text-xs font-semibold text-slate-200 border border-slate-700 rounded-md px-2.5 py-1.5 focus:ring-2 focus:ring-blue-500 focus:outline-none cursor-pointer"
-            >
-              {rolesList.map(r => (
-                <option key={r.id} value={r.id}>
-                  {t('switchRole')}: {lang === 'ta' ? r.labelTa : r.labelEn}
-                </option>
-              ))}
-            </select>
-
-            {role === 'councillor' && (
-              <select
-                value={selectedWardFilter}
-                onChange={(e) => setSelectedWardFilter(e.target.value)}
-                className="bg-amber-900/60 text-xs font-semibold text-amber-200 border border-amber-700/60 rounded-md px-2 py-1.5"
-              >
-                {MADURAI_SOUTH_WARDS.map(w => (
-                  <option key={w.ward_id} value={w.ward_id}>
-                    {lang === 'ta' ? w.name_ta : w.name_en}
-                  </option>
-                ))}
-              </select>
+          {/* User Auth Status / Representative Badge */}
+          <div className="hidden lg:flex items-center space-x-3 pl-3 border-l border-blue-900">
+            {isAuthenticated ? (
+              <div className="flex items-center space-x-2">
+                <div className="text-right">
+                  <div className="text-xs font-bold text-white flex items-center gap-1">
+                    <ShieldCheck className="w-3.5 h-3.5 text-blue-400" />
+                    {user?.name?.split('(')[0] || user?.role?.toUpperCase()}
+                  </div>
+                  <span className="text-[10px] text-blue-300 block font-mono">
+                    {user?.role === 'mla' ? 'MLA Office' : user?.ward_id}
+                  </span>
+                </div>
+                <button
+                  onClick={handleLogout}
+                  title="Logout"
+                  className="p-2 bg-blue-950/80 hover:bg-red-900/60 text-blue-200 hover:text-red-200 rounded-xl transition-colors border border-blue-800"
+                >
+                  <LogOut className="w-4 h-4" />
+                </button>
+              </div>
+            ) : (
+              <div className="flex items-center space-x-1.5">
+                <button
+                  onClick={() => handleNavClick('councillor')}
+                  className="px-2.5 py-1.5 bg-blue-950/80 hover:bg-blue-900 text-blue-200 rounded-lg text-[11px] font-bold border border-blue-800 transition-colors flex items-center gap-1"
+                >
+                  <Lock className="w-3 h-3 text-blue-400" />
+                  {t('roleCouncillor')}
+                </button>
+                <button
+                  onClick={() => handleNavClick('mla')}
+                  className="px-2.5 py-1.5 bg-blue-950/80 hover:bg-blue-900 text-blue-200 rounded-lg text-[11px] font-bold border border-blue-800 transition-colors flex items-center gap-1"
+                >
+                  <Lock className="w-3 h-3 text-blue-400" />
+                  {t('roleMla')}
+                </button>
+              </div>
             )}
           </div>
 
@@ -202,7 +211,7 @@ export const Header: React.FC<HeaderProps> = ({ currentTab, setCurrentTab }) => 
           <div className="flex lg:hidden items-center space-x-2">
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2 rounded-md text-slate-300 hover:text-white hover:bg-slate-800 focus:outline-none"
+              className="p-2 rounded-xl text-blue-200 hover:text-white hover:bg-blue-900 focus:outline-none"
             >
               {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
@@ -212,63 +221,86 @@ export const Header: React.FC<HeaderProps> = ({ currentTab, setCurrentTab }) => 
 
       {/* Mobile Drawer Navigation */}
       {mobileMenuOpen && (
-        <div className="lg:hidden bg-slate-900 border-b border-slate-800 px-4 pt-2 pb-4 space-y-2">
+        <div className="lg:hidden bg-[#0F2942] border-b border-blue-900 px-4 pt-2 pb-4 space-y-2">
           <button
             onClick={() => handleNavClick('home')}
-            className="w-full text-left px-3 py-2 rounded-md text-sm font-medium text-slate-200 hover:bg-slate-800 flex items-center gap-2"
+            className="w-full text-left px-3 py-2 rounded-xl text-sm font-medium text-blue-100 hover:bg-blue-900 flex items-center gap-2"
           >
             <Home className="w-4 h-4" />
             {t('navHome')}
           </button>
           <button
             onClick={() => handleNavClick('report')}
-            className="w-full text-left px-3 py-2.5 rounded-md text-sm font-bold bg-emerald-600 text-white flex items-center gap-2"
+            className="w-full text-left px-3 py-2.5 rounded-xl text-sm font-bold bg-blue-600 text-white flex items-center gap-2"
           >
             <PlusCircle className="w-4 h-4" />
             {t('navReportIssue')}
           </button>
           <button
             onClick={() => handleNavClick('track')}
-            className="w-full text-left px-3 py-2 rounded-md text-sm font-medium text-slate-200 hover:bg-slate-800 flex items-center gap-2"
+            className="w-full text-left px-3 py-2 rounded-xl text-sm font-medium text-blue-100 hover:bg-blue-900 flex items-center gap-2"
           >
             <Search className="w-4 h-4" />
             {t('navTrackIssue')}
           </button>
           <button
             onClick={() => handleNavClick('public')}
-            className="w-full text-left px-3 py-2 rounded-md text-sm font-medium text-slate-200 hover:bg-slate-800 flex items-center gap-2"
+            className="w-full text-left px-3 py-2 rounded-xl text-sm font-medium text-blue-100 hover:bg-blue-900 flex items-center gap-2"
           >
             <Map className="w-4 h-4" />
             {t('navPublicDashboard')}
           </button>
-          <button
-            onClick={() => handleNavClick('councillor')}
-            className="w-full text-left px-3 py-2 rounded-md text-sm font-medium text-amber-300 hover:bg-slate-800 flex items-center gap-2"
-          >
-            <LayoutDashboard className="w-4 h-4" />
-            {t('navCouncillorDashboard')}
-          </button>
-          <button
-            onClick={() => handleNavClick('mla')}
-            className="w-full text-left px-3 py-2 rounded-md text-sm font-medium text-purple-300 hover:bg-slate-800 flex items-center gap-2"
-          >
-            <BarChart3 className="w-4 h-4" />
-            {t('navMlaDashboard')}
-          </button>
 
-          <div className="pt-2 border-t border-slate-800 flex justify-between items-center text-xs">
-            <span className="text-slate-400 font-semibold">{t('switchRole')}:</span>
-            <select
-              value={role}
-              onChange={(e) => setRole(e.target.value as Role)}
-              className="bg-slate-800 text-xs text-white border border-slate-700 rounded px-2 py-1"
+          {role === 'councillor' && (
+            <button
+              onClick={() => handleNavClick('councillor')}
+              className="w-full text-left px-3 py-2 rounded-xl text-sm font-bold text-blue-100 bg-blue-900/60 border border-blue-700 flex items-center gap-2"
             >
-              {rolesList.map(r => (
-                <option key={r.id} value={r.id}>
-                  {lang === 'ta' ? r.labelTa : r.labelEn}
-                </option>
-              ))}
-            </select>
+              <LayoutDashboard className="w-4 h-4" />
+              {t('navCouncillorDashboard')}
+            </button>
+          )}
+
+          {role === 'mla' && (
+            <button
+              onClick={() => handleNavClick('mla')}
+              className="w-full text-left px-3 py-2 rounded-xl text-sm font-bold text-blue-100 bg-blue-900/60 border border-blue-700 flex items-center gap-2"
+            >
+              <BarChart3 className="w-4 h-4" />
+              {t('navMlaDashboard')}
+            </button>
+          )}
+
+          {/* Mobile Auth footer */}
+          <div className="pt-3 border-t border-blue-900 flex justify-between items-center text-xs">
+            {isAuthenticated ? (
+              <div className="flex justify-between items-center w-full">
+                <span className="text-blue-100 font-bold">
+                  {user?.name} ({user?.role})
+                </span>
+                <button
+                  onClick={handleLogout}
+                  className="px-3 py-1 bg-red-800 text-white rounded-lg font-bold"
+                >
+                  {t('btnLogout')}
+                </button>
+              </div>
+            ) : (
+              <div className="flex gap-2 w-full">
+                <button
+                  onClick={() => handleNavClick('councillor')}
+                  className="flex-1 py-1.5 text-center bg-blue-950 text-blue-200 rounded-lg font-bold border border-blue-800"
+                >
+                  {t('roleCouncillor')} Portal
+                </button>
+                <button
+                  onClick={() => handleNavClick('mla')}
+                  className="flex-1 py-1.5 text-center bg-blue-950 text-blue-200 rounded-lg font-bold border border-blue-800"
+                >
+                  {t('roleMla')} Portal
+                </button>
+              </div>
+            )}
           </div>
         </div>
       )}
